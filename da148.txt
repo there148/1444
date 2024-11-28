@@ -1,0 +1,173 @@
+min max nor:
+data=[]
+
+n=int(input("Enter the number of data value:"))
+
+for i in range(n):
+    value=int(input(f"Enter value{i+1}"))
+    data.append(value)
+
+min_value=min(data)
+max_value=max(data)
+
+new_min=int(input("Enter the new minimum value:"))
+new_max=int(input("Enter the new maximum value:"))
+
+
+normalized_data=[]
+for value in data:
+    normalized_value=((value-min_value)/(max_value-min_value))*(new_max-new_min)+new_min
+    normalized_data.append(normalized_value)
+
+print("Original data",data)
+print("normlized data",normalized_data)
+
+
+cluster:
+i1 = []
+k_clusters = []
+
+n = input("Enter number of observations: ")
+n = int(n)
+for i in range(n):
+    t = input("Enter value: ")
+    t = int(t)
+    i1.append(t)
+
+k = int(input("Enter the value of K (number of clusters): "))
+
+for _ in range(k):
+    k_clusters.append([])
+
+i = 0
+while i < n:
+    for j in range(k):
+        if i < n:
+            k_clusters[j].append(i1[i])
+            i += 1
+
+print("Initial clusters:")
+i = 0
+while i < len(k_clusters):
+    print(f"Cluster {i + 1}: {k_clusters[i]}")
+    i += 1
+
+k_means = []
+for cluster in k_clusters:
+    k_means.append(sum(cluster) / len(cluster))
+
+swap = True
+while swap:
+    swap = False
+    i = 0
+    while i < len(k_clusters):
+        cluster = k_clusters[i]
+        for item in cluster[:]:
+            distances = [abs(item - mean) for mean in k_means]
+            min_distance = min(distances)
+            min_index = distances.index(min_distance)
+
+            if min_index != i:
+                k_clusters[i].remove(item)
+                k_clusters[min_index].append(item)
+                swap = True
+        i += 1
+
+    k_means = []
+    for cluster in k_clusters:
+        if len(cluster) > 0:
+            k_means.append(sum(cluster) / len(cluster))
+        else:
+            k_means.append(0)
+
+    print("Clusters after an iteration:")
+    i = 0
+    while i < len(k_clusters):
+        print(f"Cluster {i + 1}: {k_clusters[i]}")
+        i += 1
+    print("Means:", k_means)
+
+print("Final clusters:")
+i = 0
+while i < len(k_clusters):
+    print(f"Cluster {i + 1}: {k_clusters[i]}")
+    i += 1
+print("Final means:", k_means)
+ 
+
+
+binning by mean:
+# Get user input for the number of values
+num_values = int(input("Enter the number of values: "))
+ 
+# Get user input for the actual values
+data = []
+print("Enter the values one by one:")
+for _ in range(num_values):
+    value = int(input())
+    data.append(value)
+ 
+# Get user input for the number of bins
+num_bins = int(input("Enter the number of bins: "))
+ 
+# Calculate the bin size
+bin_size = len(data) // num_bins
+ 
+# Divide the data into bins
+bins = [data[i * bin_size: (i + 1) * bin_size] for i in range(num_bins)]
+ 
+# Add leftover items to the last bin if data cannot divide evenly
+if len(data) % num_bins != 0:
+    bins[-1].extend(data[num_bins * bin_size:])
+ 
+# Binning by Mean
+binned_by_mean = []
+for bin_ in bins:
+    mean = sum(bin_) // len(bin_)
+    binned_by_mean.append([mean] * len(bin_))
+ 
+# Print Results
+print("\nOriginal Data:", data)
+print("\nBins:", bins)
+print("\nBinned by Mean:", binned_by_mean)
+
+
+
+Bin by boundry:
+
+# Get user input for the number of values
+num_values = int(input("Enter the number of values: "))
+ 
+# Get user input for the actual values
+data = []
+print("Enter the values one by one:")
+for _ in range(num_values):
+    value = int(input())
+    data.append(value)
+ 
+# Get user input for the number of bins
+num_bins = int(input("Enter the number of bins: "))
+ 
+# Calculate the bin size
+bin_size = len(data) // num_bins
+ 
+# Divide the data into bins
+bins = [data[i * bin_size: (i + 1) * bin_size] for i in range(num_bins)]
+ 
+# Add leftover items to the last bin if data cannot divide evenly
+if len(data) % num_bins != 0:
+    bins[-1].extend(data[num_bins * bin_size:])
+ 
+# Binning by Boundaries
+binned_by_boundaries = []
+ 
+for bin_ in bins:
+    lower, upper = min(bin_), max(bin_)  # Find boundaries of the bin
+    binned_bin = [lower if abs(x - lower) <= abs(x - upper) else upper for x in bin_]  # Replace values
+    binned_by_boundaries.append(binned_bin)
+ 
+# Print Results
+print("\nOriginal Data:", data)
+print("\nBins:", bins)
+print("\nBoundaries:", [(min(bin_), max(bin_)) for bin_ in bins])
+print("\nBinned by Boundaries:", binned_by_boundaries)
